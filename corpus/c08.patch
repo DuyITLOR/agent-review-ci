@@ -1,0 +1,20 @@
+diff --git a/src/http.js b/src/http.js
+index 4cfe353..e48bb89 100644
+--- a/src/http.js
++++ b/src/http.js
+@@ -14,11 +14,11 @@ export function problem(res, status, slug, title, extra = {}) {
+ }
+ 
+ export async function readJson(req) {
+-  let raw = '';
+-  for await (const chunk of req) raw += chunk;
+-  if (!raw) return {};
++  let text = '';
++  for await (const chunk of req) text += chunk;
++  if (!text) return {};
+   try {
+-    return JSON.parse(raw);
++    return JSON.parse(text);
+   } catch {
+     return null;
+   }

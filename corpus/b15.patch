@@ -1,0 +1,13 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..20a5110 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -58,7 +58,7 @@ export function createApp(db) {
+ 
+     if (req.method === 'POST' && p[1] === 'submissions' && p[3] === 'review' && p.length === 4) {
+       const s = q.submission.get(Number(p[2]));
+-      if (!s || !isStaff(me, s.class_id)) {
++      if (!s) {
+         return problem(res, 404, 'not-found', 'No such submission');
+       }
+       const body = await readJson(req);

@@ -1,0 +1,16 @@
+{
+  "name": "agent-review-ci",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "SEMINAR F3: does an LLM reviewer in CI catch seeded bugs that the tests miss?",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "setup": "npm ci --prefix app",
+    "measure": "node scripts/measure.js",
+    "review": "node scripts/ci-review.js",
+    "verify-corpus": "node scripts/verify-corpus.js"
+  }
+}

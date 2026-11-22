@@ -1,0 +1,4 @@
+node_modules/
+.env
+review.md
+.DS_Store

@@ -1,0 +1,13 @@
+diff --git a/src/grades.js b/src/grades.js
+index 7bf36e4..93aecc0 100644
+--- a/src/grades.js
++++ b/src/grades.js
+@@ -4,7 +4,7 @@
+ // deduction the TA declared. The mark never goes below 0.
+ export function markFor(verdicts) {
+   const lost = verdicts
+-    .filter((v) => v.verdict === 'violation' && v.decision !== 'overturn')
++    .filter((v) => v.verdict !== 'pass' && v.decision !== 'overturn')
+     .reduce((sum, v) => sum + v.deduction, 0);
+   return Math.max(0, 10 - lost);
+ }

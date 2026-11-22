@@ -1,0 +1,19 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..99426df 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -78,14 +78,6 @@ export function createApp(db) {
+         }
+         return problem(res, 404, 'not-found', 'No such lab');
+       }
+-      if (!lab.published_at) {
+-        const pending = q.byLab
+-          .all(lab.id)
+-          .filter((s) => needsReview(s.verdict) && !s.decision).length;
+-        if (pending > 0) {
+-          return problem(res, 409, 'reviews-pending', 'Reviews are pending', { pending });
+-        }
+-      }
+       // The WHERE clause keeps a second click from moving the time.
+       q.publish.run(lab.id);
+       return send(res, 200, { lab: lab.id, publishedAt: q.lab.get(lab.id).published_at });

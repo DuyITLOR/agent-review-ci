@@ -1,0 +1,335 @@
+{
+  "about": "Built by corpus/build-corpus.mjs. Each patch is one fake pull request against the clean app in app/. kind: bug | clean. testsCatch: does `npm run check` go red on it (checked by `npm run verify-corpus`). rule: what the patch breaks, from app/docs/contract/publish.md or the behaviour of the clean code.",
+  "patches": [
+    {
+      "id": "b01",
+      "kind": "bug",
+      "category": "pending-409",
+      "testsCatch": true,
+      "rule": "It refuses while reviews are pending (409): the pending check is deleted.",
+      "file": "b01.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b02",
+      "kind": "bug",
+      "category": "validation",
+      "testsCatch": false,
+      "rule": "The review endpoint accepts any truthy decision; the database CHECK then throws and the caller gets 500 instead of 400.",
+      "file": "b02.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b03",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": true,
+      "rule": "A student enrolled in the class must get 403; this returns 404.",
+      "file": "b03.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b04",
+      "kind": "bug",
+      "category": "refused-changes-nothing",
+      "testsCatch": true,
+      "rule": "A refused call changes nothing: published_at is written before the access check.",
+      "file": "b04.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b05",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": true,
+      "rule": "An admin may publish; isStaff no longer lets admins through.",
+      "file": "b05.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b06",
+      "kind": "bug",
+      "category": "error-format",
+      "testsCatch": true,
+      "rule": "Every error is application/problem+json; errors are sent as application/json.",
+      "file": "b06.patch",
+      "files": [
+        "src/http.js"
+      ]
+    },
+    {
+      "id": "b07",
+      "kind": "bug",
+      "category": "idempotency",
+      "testsCatch": true,
+      "rule": "It is safe to repeat: without the published_at IS NULL guard a second call moves the time.",
+      "file": "b07.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b08",
+      "kind": "bug",
+      "category": "grading-logic",
+      "testsCatch": true,
+      "rule": "An overturned violation takes off nothing; markFor now deducts it.",
+      "file": "b08.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "b09",
+      "kind": "bug",
+      "category": "grading-logic",
+      "testsCatch": true,
+      "rule": "Every unsure verdict must go to the TA; needsReview drops unsure.",
+      "file": "b09.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "b10",
+      "kind": "bug",
+      "category": "authn",
+      "testsCatch": true,
+      "rule": "No token or an unknown token is 401; this answers 404.",
+      "file": "b10.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b11",
+      "kind": "bug",
+      "category": "error-format",
+      "testsCatch": true,
+      "rule": "The 409 problem type is .../reviews-pending; the slug is changed.",
+      "file": "b11.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b12",
+      "kind": "bug",
+      "category": "pending-409",
+      "testsCatch": false,
+      "rule": "A submission with verdict unsure and no decision is pending; the count only looks at violation.",
+      "file": "b12.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b13",
+      "kind": "bug",
+      "category": "pending-409",
+      "testsCatch": false,
+      "rule": "It refuses while reviews are pending, for every caller; admins skip the check.",
+      "file": "b13.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b14",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": false,
+      "rule": "The review queue is for staff of the class and admins; enrolled students can now read it.",
+      "file": "b14.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b15",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": false,
+      "rule": "Only staff of the class may review a submission; the staff check is removed, any signed-in user can decide.",
+      "file": "b15.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b16",
+      "kind": "bug",
+      "category": "grading-logic",
+      "testsCatch": false,
+      "rule": "Only a violation upheld by the TA takes marks off; unsure verdicts now deduct too.",
+      "file": "b16.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "b17",
+      "kind": "bug",
+      "category": "error-format",
+      "testsCatch": false,
+      "rule": "Every error is problem details with type, title and status; title is dropped.",
+      "file": "b17.patch",
+      "files": [
+        "src/http.js"
+      ]
+    },
+    {
+      "id": "b18",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": false,
+      "rule": "A student of another class must get 404 (same as a missing lab); every student now gets 403 and learns the lab exists.",
+      "file": "b18.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b19",
+      "kind": "bug",
+      "category": "authz",
+      "testsCatch": false,
+      "rule": "Staff are checked against the lab id instead of its class id; correct only while lab ids equal class ids, as in the seed.",
+      "file": "b19.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "b20",
+      "kind": "bug",
+      "category": "security",
+      "testsCatch": false,
+      "rule": "The bearer token is interpolated into SQL: a token like 'OR'1'='1 signs in as the first user (admin).",
+      "file": "b20.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c01",
+      "kind": "clean",
+      "category": "rename",
+      "testsCatch": false,
+      "rule": "Renames the parameter of isStaff.",
+      "file": "c01.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c02",
+      "kind": "clean",
+      "category": "extract-function",
+      "testsCatch": false,
+      "rule": "Moves the pending count into a helper.",
+      "file": "c02.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c03",
+      "kind": "clean",
+      "category": "comments",
+      "testsCatch": false,
+      "rule": "Adds comments only.",
+      "file": "c03.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c04",
+      "kind": "clean",
+      "category": "rename",
+      "testsCatch": false,
+      "rule": "Renames the path segments variable p to parts.",
+      "file": "c04.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c05",
+      "kind": "clean",
+      "category": "refactor",
+      "testsCatch": false,
+      "rule": "Rewrites markFor as a loop; same result.",
+      "file": "c05.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "c06",
+      "kind": "clean",
+      "category": "refactor",
+      "testsCatch": false,
+      "rule": "Writes needsReview with includes; same result.",
+      "file": "c06.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "c07",
+      "kind": "clean",
+      "category": "wording",
+      "testsCatch": false,
+      "rule": "Changes the human-readable title of the 401; the contract fixes type and status, not the title text.",
+      "file": "c07.patch",
+      "files": [
+        "src/app.js"
+      ]
+    },
+    {
+      "id": "c08",
+      "kind": "clean",
+      "category": "rename",
+      "testsCatch": false,
+      "rule": "Renames a local variable in readJson.",
+      "file": "c08.patch",
+      "files": [
+        "src/http.js"
+      ]
+    },
+    {
+      "id": "c09",
+      "kind": "clean",
+      "category": "comments",
+      "testsCatch": false,
+      "rule": "Adds JSDoc to grades.js.",
+      "file": "c09.patch",
+      "files": [
+        "src/grades.js"
+      ]
+    },
+    {
+      "id": "c10",
+      "kind": "clean",
+      "category": "refactor",
+      "testsCatch": false,
+      "rule": "Reads the lab id once into a const in the publish handler.",
+      "file": "c10.patch",
+      "files": [
+        "src/app.js"
+      ]
+    }
+  ]
+}

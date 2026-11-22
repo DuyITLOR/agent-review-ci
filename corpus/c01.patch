@@ -1,0 +1,13 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..d1d4ccf 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -32,7 +32,7 @@ export function createApp(db) {
+     const m = /^Bearer (\S+)$/.exec(req.headers.authorization ?? '');
+     return m ? q.userByToken.get(m[1]) : undefined;
+   };
+-  const isStaff = (me, classId) => me.role === 'admin' || !!q.staff.get(classId, me.id);
++  const isStaff = (user, classId) => user.role === 'admin' || !!q.staff.get(classId, user.id);
+ 
+   async function handle(req, res) {
+     const url = new URL(req.url, 'http://x');

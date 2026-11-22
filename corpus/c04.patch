@@ -1,0 +1,59 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..d91910c 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -36,9 +36,9 @@ export function createApp(db) {
+ 
+   async function handle(req, res) {
+     const url = new URL(req.url, 'http://x');
+-    const p = url.pathname.split('/').filter(Boolean);
++    const parts = url.pathname.split('/').filter(Boolean);
+ 
+-    if (req.method === 'GET' && p.length === 0) {
++    if (req.method === 'GET' && parts.length === 0) {
+       res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+       return res.end(PAGE);
+     }
+@@ -46,8 +46,8 @@ export function createApp(db) {
+     const me = whoIs(req);
+     if (!me) return problem(res, 401, 'unauthenticated', 'Sign in first');
+ 
+-    if (req.method === 'GET' && p[1] === 'labs' && p[3] === 'queue' && p.length === 4) {
+-      const lab = q.lab.get(Number(p[2]));
++    if (req.method === 'GET' && parts[1] === 'labs' && parts[3] === 'queue' && parts.length === 4) {
++      const lab = q.lab.get(Number(parts[2]));
+       if (!lab || !isStaff(me, lab.class_id)) return problem(res, 404, 'not-found', 'No such lab');
+       return send(res, 200, {
+         lab: lab.id,
+@@ -56,8 +56,13 @@ export function createApp(db) {
+       });
+     }
+ 
+-    if (req.method === 'POST' && p[1] === 'submissions' && p[3] === 'review' && p.length === 4) {
+-      const s = q.submission.get(Number(p[2]));
++    if (
++      req.method === 'POST' &&
++      parts[1] === 'submissions' &&
++      parts[3] === 'review' &&
++      parts.length === 4
++    ) {
++      const s = q.submission.get(Number(parts[2]));
+       if (!s || !isStaff(me, s.class_id)) {
+         return problem(res, 404, 'not-found', 'No such submission');
+       }
+@@ -69,8 +74,13 @@ export function createApp(db) {
+       return send(res, 200, { id: s.id, decision: body.decision });
+     }
+ 
+-    if (req.method === 'POST' && p[1] === 'labs' && p[3] === 'publish' && p.length === 4) {
+-      const lab = q.lab.get(Number(p[2]));
++    if (
++      req.method === 'POST' &&
++      parts[1] === 'labs' &&
++      parts[3] === 'publish' &&
++      parts.length === 4
++    ) {
++      const lab = q.lab.get(Number(parts[2]));
+       if (!lab) return problem(res, 404, 'not-found', 'No such lab');
+       if (!isStaff(me, lab.class_id)) {
+         if (q.enrolled.get(lab.class_id, me.id)) {

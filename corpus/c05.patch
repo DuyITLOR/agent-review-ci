@@ -1,0 +1,18 @@
+diff --git a/src/grades.js b/src/grades.js
+index 7bf36e4..b528f41 100644
+--- a/src/grades.js
++++ b/src/grades.js
+@@ -3,9 +3,10 @@
+ // A mark out of 10: each constraint the TA upheld as a violation takes off the
+ // deduction the TA declared. The mark never goes below 0.
+ export function markFor(verdicts) {
+-  const lost = verdicts
+-    .filter((v) => v.verdict === 'violation' && v.decision !== 'overturn')
+-    .reduce((sum, v) => sum + v.deduction, 0);
++  let lost = 0;
++  for (const v of verdicts) {
++    if (v.verdict === 'violation' && v.decision !== 'overturn') lost += v.deduction;
++  }
+   return Math.max(0, 10 - lost);
+ }
+ 

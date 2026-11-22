@@ -1,0 +1,15 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..25791b4 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -23,9 +23,7 @@ export function createApp(db) {
+     submission: db.prepare(`SELECT s.id, l.class_id FROM submissions s
+                             JOIN labs l ON l.id = s.lab_id WHERE s.id = ?`),
+     review: db.prepare('UPDATE submissions SET decision = ? WHERE id = ?'),
+-    publish: db.prepare(
+-      "UPDATE labs SET published_at = datetime('now') WHERE id = ? AND published_at IS NULL",
+-    ),
++    publish: db.prepare("UPDATE labs SET published_at = datetime('now') WHERE id = ?"),
+   };
+ 
+   const whoIs = (req) => {

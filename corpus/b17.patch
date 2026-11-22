@@ -1,0 +1,13 @@
+diff --git a/src/http.js b/src/http.js
+index 4cfe353..b340ed5 100644
+--- a/src/http.js
++++ b/src/http.js
+@@ -10,7 +10,7 @@ export function send(res, status, body) {
+ // RFC 9457 problem details, the same error model as session 5.
+ export function problem(res, status, slug, title, extra = {}) {
+   res.writeHead(status, { 'content-type': 'application/problem+json' });
+-  res.end(JSON.stringify({ type: PROBLEM_BASE + slug, title, status, ...extra }));
++  res.end(JSON.stringify({ type: PROBLEM_BASE + slug, status, ...extra }));
+ }
+ 
+ export async function readJson(req) {

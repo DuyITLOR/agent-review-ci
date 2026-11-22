@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  # The baseline gate: lint, format, unit and contract tests. Required on main.
+  gates:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: app/package.json
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+      - run: npm run check
+
+  # The change under study: an LLM reads the PR diff and the contract, and may block.
+  # Configure in Settings -> Secrets and variables -> Actions:
+  #   variables: REVIEWER_PROVIDER, REVIEWER_MODEL, REVIEWER_BASE_URL (openai-compatible only)
+  #   secret:    ANTHROPIC_API_KEY or REVIEWER_API_KEY (GitHub Models uses GITHUB_TOKEN)
+  agent-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      models: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+      - name: Review the diff
+        id: review
+        env:
+          REVIEWER_PROVIDER: ${{ vars.REVIEWER_PROVIDER }}
+          REVIEWER_MODEL: ${{ vars.REVIEWER_MODEL }}
+          REVIEWER_BASE_URL: ${{ vars.REVIEWER_BASE_URL }}
+          REVIEWER_MODE: ${{ vars.REVIEWER_MODE }}
+          REVIEWER_USD_PER_MTOK_IN: ${{ vars.REVIEWER_USD_PER_MTOK_IN }}
+          REVIEWER_USD_PER_MTOK_OUT: ${{ vars.REVIEWER_USD_PER_MTOK_OUT }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REVIEWER_API_KEY: ${{ secrets.REVIEWER_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/ci-review.js origin/${{ github.base_ref }}
+      - name: Post the verdict on the PR
+        if: always() && hashFiles('review.md') != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file review.md

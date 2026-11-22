@@ -1,0 +1,14 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..0fd1daf 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -70,7 +70,8 @@ export function createApp(db) {
+     }
+ 
+     if (req.method === 'POST' && p[1] === 'labs' && p[3] === 'publish' && p.length === 4) {
+-      const lab = q.lab.get(Number(p[2]));
++      const labId = Number(p[2]);
++      const lab = q.lab.get(labId);
+       if (!lab) return problem(res, 404, 'not-found', 'No such lab');
+       if (!isStaff(me, lab.class_id)) {
+         if (q.enrolled.get(lab.class_id, me.id)) {

@@ -1,0 +1,24 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..d886c53 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -32,6 +32,8 @@ export function createApp(db) {
+     const m = /^Bearer (\S+)$/.exec(req.headers.authorization ?? '');
+     return m ? q.userByToken.get(m[1]) : undefined;
+   };
++  const pendingReviews = (labId) =>
++    q.byLab.all(labId).filter((s) => needsReview(s.verdict) && !s.decision).length;
+   const isStaff = (me, classId) => me.role === 'admin' || !!q.staff.get(classId, me.id);
+ 
+   async function handle(req, res) {
+@@ -79,9 +81,7 @@ export function createApp(db) {
+         return problem(res, 404, 'not-found', 'No such lab');
+       }
+       if (!lab.published_at) {
+-        const pending = q.byLab
+-          .all(lab.id)
+-          .filter((s) => needsReview(s.verdict) && !s.decision).length;
++        const pending = pendingReviews(lab.id);
+         if (pending > 0) {
+           return problem(res, 409, 'reviews-pending', 'Reviews are pending', { pending });
+         }

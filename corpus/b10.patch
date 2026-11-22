@@ -1,0 +1,13 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..50a34e4 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -44,7 +44,7 @@ export function createApp(db) {
+     }
+ 
+     const me = whoIs(req);
+-    if (!me) return problem(res, 401, 'unauthenticated', 'Sign in first');
++    if (!me) return problem(res, 404, 'not-found', 'No such route');
+ 
+     if (req.method === 'GET' && p[1] === 'labs' && p[3] === 'queue' && p.length === 4) {
+       const lab = q.lab.get(Number(p[2]));

@@ -1,0 +1,13 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..11ac20f 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -81,7 +81,7 @@ export function createApp(db) {
+       if (!lab.published_at) {
+         const pending = q.byLab
+           .all(lab.id)
+-          .filter((s) => needsReview(s.verdict) && !s.decision).length;
++          .filter((s) => s.verdict === 'violation' && !s.decision).length;
+         if (pending > 0) {
+           return problem(res, 409, 'reviews-pending', 'Reviews are pending', { pending });
+         }

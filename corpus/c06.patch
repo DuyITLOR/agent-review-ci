@@ -1,0 +1,11 @@
+diff --git a/src/grades.js b/src/grades.js
+index 7bf36e4..60ea030 100644
+--- a/src/grades.js
++++ b/src/grades.js
+@@ -11,5 +11,5 @@ export function markFor(verdicts) {
+ 
+ // What must go to the TA before publishing: every violation and every unsure.
+ export function needsReview(verdict) {
+-  return verdict === 'violation' || verdict === 'unsure';
++  return ['violation', 'unsure'].includes(verdict);
+ }

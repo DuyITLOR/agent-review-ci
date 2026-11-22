@@ -1,0 +1,13 @@
+diff --git a/src/app.js b/src/app.js
+index 6e67e39..7747803 100644
+--- a/src/app.js
++++ b/src/app.js
+@@ -73,7 +73,7 @@ export function createApp(db) {
+       const lab = q.lab.get(Number(p[2]));
+       if (!lab) return problem(res, 404, 'not-found', 'No such lab');
+       if (!isStaff(me, lab.class_id)) {
+-        if (q.enrolled.get(lab.class_id, me.id)) {
++        if (me.role === 'student') {
+           return problem(res, 403, 'forbidden', 'Only staff of this class may publish');
+         }
+         return problem(res, 404, 'not-found', 'No such lab');
