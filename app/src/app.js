@@ -28,6 +28,7 @@ export function createApp(db) {
     ),
   };
 
+  // The caller, from the Authorization header; undefined for no token or an unknown one.
   const whoIs = (req) => {
     const m = /^Bearer (\S+)$/.exec(req.headers.authorization ?? '');
     return m ? q.userByToken.get(m[1]) : undefined;
@@ -78,6 +79,7 @@ export function createApp(db) {
         }
         return problem(res, 404, 'not-found', 'No such lab');
       }
+      // A lab that is already published skips the check: repeating is safe (contract).
       if (!lab.published_at) {
         const pending = q.byLab
           .all(lab.id)
